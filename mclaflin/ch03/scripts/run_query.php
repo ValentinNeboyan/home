@@ -4,9 +4,16 @@ require '../../scripts/database_connection.php';
 $query_text = $_REQUEST['query'];
 $result = mysqli_query($link, $query_text);
 if (!$result) {
-    die("<p>Ошибка при выполнении SQL-запроса" . $query_text . ": " . mysqli_error($link) . "</p>");
+    die("<p>Ошибка при выполнении SQL-запроса <b>" . $query_text . ": " . mysqli_error($link) . "</b></p>");
 }
-$return_rows = false;
+
+$return_rows = true;
+if (preg_match("/^ *(CREATE|INSERT|UPDATE|DELETE|DROP)/i", $query_text)) {
+    $return_rows = false;
+}
+
+
+/*$return_rows = false;
 $uppercase_query_text = strtoupper($query_text);
 $location = strpos($uppercase_query_text, "CREATE");
 if ($location === false) {
@@ -26,7 +33,7 @@ if ($location === false) {
             }
         }
     }
-}
+}*/
 if ($return_rows) {
 // имеются строки для показа в качестве результата запроса
     echo "<p>Результаты вашего запроса:</p>";
