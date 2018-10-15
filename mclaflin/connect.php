@@ -1,11 +1,6 @@
 <?php
-require '../../scripts/app_config.php';
-
-
-$link=mysqli_connect(DB_HOST,  DB_USERNAME, DB_PASSWORD, DB_NAME)
-or die("<p>Ошибка подключения к базе данных: " .
-    mysqli_error() . "</p>");
-echo "<p>Вы подключились к MySQL!</p>";
+require_once 'scripts/app_config.php';
+require_once 'scripts/database_connection.php';
 
 $result = mysqli_query($link,"SHOW TABLES;");
 if (!$result) {

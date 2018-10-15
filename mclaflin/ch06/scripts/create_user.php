@@ -1,5 +1,5 @@
 <?php
-require '../../scripts/database_connection.php';
+require_once '../../scripts/database_connection.php';
 
 $first_name=trim($_REQUEST['first_name']);
 $last_name=trim($_REQUEST['last_name']);

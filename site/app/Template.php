@@ -1,21 +1,21 @@
 <?php
+
+namespace App;
+
 class Template
 {
-    public function  render($template, $variables[], $toVariable=false){
-        $result="Template{$template} is not exist";
+	/**
+	 * @var string
+	 */
+	private $template_path = __DIR__ . 'app/templates/';
 
-        if($this->isTemplateexists($template)){
-            ob_start();
-            require_once($template);
-            $content=ob_get_clean();
-                   }
-    }
+	/**
+	 * @var string
+	 */
+	private $template_extension = '.html';
 
-private function setVariables($content, $variables){
+	public function render($template, $variables = [])
+	{
 
-        return str_replace(array_keys($variables))
-
-                }
-
-
+	}
 }
