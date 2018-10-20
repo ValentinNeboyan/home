@@ -26,7 +26,7 @@ if ($status){
         setcookie("password", $password, time()+60*60*24*365);
             }
             echo "Вход выполнен!";
-    
+
 }else{
     echo "Неудача";
 
