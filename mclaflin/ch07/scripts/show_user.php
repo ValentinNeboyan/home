@@ -19,6 +19,9 @@ if ($result) {
     $user_image = get_web_path($row['user_pic']);
     $facebook_url = $row['facebook_url'];
     $twitter_handle = $row['twitter_handle'];
+    $profile_pic_id = $row['profile_pic_id'];
+    $image_query = sprintf("SELECT * FROM images WHERE image_id = %d", $profile_pic_id);
+    $image_result = mysqli_query($link, $image_query);
 // Превращение $twitter_handle в URL
     $twitter_url = "http://www.twitter.com/" .
         substr($twitter_handle, $position + 1);

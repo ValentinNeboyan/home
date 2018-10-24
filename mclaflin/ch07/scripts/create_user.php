@@ -34,16 +34,16 @@ or handle_error("сервер не может получить выбранно�
 
 // Является ли этот файл результатом нормальной отправки?
 @is_uploaded_file($_FILES[$image_fieldname]['tmp_name'])
-or handle_error("вы попытались совершить безнравственный поступок. Позор!",
+/*or handle_error("вы попытались совершить безнравственный поступок. Позор!",
     "Запрос на отправку: файл назывался " .
-    "'{$_FILES[$image_fieldname]['tmp_name']}'");
+    "'{$_FILES[$image_fieldname]['tmp_name']}'")*/;
 
 // Действительно ли это изображение?
 @getimagesize($_FILES[$image_fieldname]['tmp_name'])
-or handle_error("вы выбрали файл для своего фото, " .
+/*or handle_error("вы выбрали файл для своего фото, " .
     "который не является изображением.",
     "{$_FILES[$image_fieldname]['tmp_name']} " .
-    "не является файлом изображения.");
+    "не является файлом изображения.")*/;
 
 // Присваивание файлу уникального имени
 $now = time();
@@ -59,18 +59,59 @@ echo $_FILES[$image_fieldname]['tmp_name'];*/
 
 
 // И наконец, перемещение файла на его постоянное место
-@move_uploaded_file($_FILES[$image_fieldname]['tmp_name'], $upload_filename)
+//@move_uploaded_file($_FILES[$image_fieldname]['tmp_name'], $upload_filename)
 /*or handle_error("возникла проблема сохранения вашего изображения " .
     "в его постоянном месте.",
     "ошибка, связанная с правами доступа при перемещении " .
     "файла в {$upload_filename}")*/;
 
 
-$insert_sql = "INSERT INTO users (first_name, last_name, email, bio, facebook_url, twitter_handle, user_pic)" .
-   " VALUES ('{$first_name}', '{$last_name}', '{$email}', '{$bio}', '{$facebook_url}', '{$twitter_handle}', '{$upload_filename}');";
+/*$insert_sql = "INSERT INTO users (first_name, last_name, email, bio, facebook_url, twitter_handle, user_pic)" .
+   " VAL/*UES ('{$first_name}', '{$last_name}', '{$email}', '{$bio}', '{$facebook_url}', '{$twitter_handle}', '{$upload_filename}');";*/
 // Вставка данных о пользователе в базу данных
+
+/*$insert_sql = "INSERT INTO users (first_name, last_name, email, bio, facebook_url, twitter_handle )" .
+    " VALUES ('{$first_name}', '{$last_name}', '{$email}', '{$bio}', '{$facebook_url}', '{$twitter_handle}');";*/
+
+
+
+$user_id = mysqli_insert_id($link);
+
+$image=$_FILES[$image_fieldname];
+$image_filename=$image['name'];
+$image_info=getimagesize($image['tmp_name']);
+$image_mime_type=$image_info['mime'];
+$image_size=$image['size'];
+$image_data=file_get_contents($image['tmp_name']);
+
+/*$insert_image_sql="INSERT INTO images (filename, mime_type, file_size, image_data)".
+    "VALUES ('{$image_filename}', '{$image_mime_type}', '{$image_size}', '{$image_data}')";*/
+
+$insert_image_sql = sprintf("INSERT INTO images (filename, mime_type, file_size, image_data) " .
+    "VALUES ('%s', '%s', %d, '%s');",
+    mysqli_real_escape_string($link, $image_filename),
+    mysqli_real_escape_string($link, $image_mime_type),
+    mysqli_real_escape_string($link, $image_size),
+    mysqli_real_escape_string($link, $image_data));
+
+
+mysqli_query($link, $insert_image_sql)
+or die(mysqli_error($link));
+
+$insert_sql = sprintf("INSERT INTO users (first_name, last_name, email, bio, facebook_url, twitter_handle, profile_pic_id) " .
+    "VALUES ('%s', '%s', '%s', '%s', '%s', '%s','%d');",
+    mysqli_real_escape_string($link, $first_name),
+    mysqli_real_escape_string($link, $last_name),
+    mysqli_real_escape_string($link, $email),
+    mysqli_real_escape_string($link, $bio),
+    mysqli_real_escape_string($link, $facebook_url),
+    mysqli_real_escape_string($link, $twitter_handle),
+    mysqli_insert_id($link));
+
 mysqli_query($link, $insert_sql)
 or die(mysqli_error($link));
+
+
 header("Location: show_user.php?user_id=" . mysqli_insert_id($link));
 exit();
 ?>
