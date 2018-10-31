@@ -16,11 +16,11 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     if ($count==1){
         $_SESSION['username']=$username;
     }else{
-        $fsmsg="Ошибка";
+        $fsmsg="Нет пользователя с такими данными";
     }
     if (isset($_SESSION['username'])){
 
-        echo "Привет ". $_SESSION['username']."! ";
+        echo "Привет, ". $_SESSION['username']."! ";
         echo "Вы вошли. ";
         echo "<a href='logout.php' class='btn.btn-lg.btn-primary.btn-block'>Выход</a>";
     }
@@ -44,6 +44,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 <div class="container">
     <form action="" class="form-signin" method="post">
         <h2>Авторизация</h2>
+        <? if (isset($fsmsg)) {?> <div class="alert alert-danger" role="alert"> <?=$fsmsg ; ?> </div><?}?>
         <input type="text" name="username" placeholder="Введите имя" class="form-control" required>
         <input type="password" name="password" placeholder="Введите пароль" class="form-control" required>
         <button class="btn btn-lg btn-primary btn-block">Авторизация</button>
