@@ -6,12 +6,12 @@
         <div class="row">
             <div class="col-sm-3">
                 <div class="jumbotron">
-                    <p><span class="label label-primary">Категорий 0</span></p>
+                    <p><span class="label label-primary">Категорий {{$count_categories}}</span></p>
                 </div>
             </div>
             <div class="col-sm-3">
                 <div class="jumbotron">
-                    <p><span class="label label-primary">Материалов 0</span></p>
+                    <p><span class="label label-primary">Материалов {{$count_articles}}</span></p>
                 </div>
             </div>
             <div class="col-sm-3">
@@ -28,22 +28,27 @@
 
         <div class="row">
             <div class="col-sm-6">
-                <a class="btn btn-block btn-default" href="#" >Создать категорию</a>
-                <a class="list-group-item" href="#" >
-                <h4 class="list-group-item-heading">Категория первая</h4>
+                <a class="btn btn-block btn-default" href="{{route('admin.category.create')}}" >Создать категорию</a>
+                @foreach($categories as $category)
+                <a class="list-group-item" href="{{route('admin.category.edit', $category)}}" >
+                <h4 class="list-group-item-heading">{{$category->title}}</h4>
                 <p class="list-group-item-text">
-                    Количество материалов
+                   {{$category->articles()->count()}}
                 </p>
                 </a>
+                @endforeach
             </div>
             <div class="col-sm-6">
                 <a href="#" class="btn btn-block btn-default">Создать материал</a>
-                <a href="#" class="list-group-item">
-                    <h4 class="list-group-item-heading">Материал первый </h4>
+                @foreach($articles as $article)
+
+                <a href="{{route('admin.article.edit', $article)}}" class="list-group-item">
+                    <h4 class="list-group-item-heading">{{$article->title}} </h4>
                     <p class="list-group-item-text">
-                        Категория
+                        {{$article->categories()->pluck('title')->implode(', ')}}
                     </p>
                 </a>
+                @endforeach
             </div>
         </div>
     </div>
